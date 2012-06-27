@@ -2,10 +2,10 @@
 
 FactoryGirl.define do
   factory :task do
-    date_due "2012-06-27"
+    due_date "2012-06-27"
     important false
     completed false
-    title "MyString"
+    name "MyString"
     description "MyString"
   end
 end

@@ -1,13 +1,8 @@
 # encoding: utf-8
-
-Допустим /^сейчас дата "(.*?)"$/ do |date|
-  t = Time.strptime(date, "%d.%m.%y")
-  Timecop.travel(t)
-end
-
 Допустим /^в базе есть задачи:$/ do |table|
   table.hashes.each do |t|
-    Task.create(
+    FactoryGirl.create(
+      :task,
       due_date: t["дата"],
       important: t["важно"],
       completed: t["выполнено"],
@@ -17,12 +12,14 @@ end
   end
 end
 
-Если /^я захожу по адресу "(.*?)"$/ do |path|
-  visit path
+То /^я вижу следующие задачи:$/ do |table|
+  table.raw.flatten.each do |text|
+    page.should have_content text
+  end
 end
 
-То /^вижу список задач которые есть в базе:$/ do |table|
-  table.hashes.each do |t|
-    page.should have_content text
+То /^не вижу следующие задачи:$/ do |table|
+  table.raw.flatten.each do |text|
+    page.should_not have_content text
   end
 end

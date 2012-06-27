@@ -1,0 +1,22 @@
+.tasks
+  %h1 Задачи на ближайшие 7 дней
+  
+  - unless @tasks.empty?
+  
+    - previous_due_date = nil
+    - @tasks.each do |task|
+      - if not previous_due_date.nil? and task.due_date > previous_due_date
+        %h2
+          = Russian.strftime(task.due_date, '%A, %d %b')
+          = " (сегодня)" if task.due_date == Date.today
+
+      %div{ :class => get_task_class(task) }
+        %h3= task.name
+        .description = task.description
+        
+  - else
+    
+    .message
+      К сожалению вы пока не добавили ни одной задачи,
+      почему бы не #{link_to 'сделать это сейчас', '#'}?
+  
