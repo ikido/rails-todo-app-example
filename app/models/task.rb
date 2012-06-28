@@ -12,4 +12,5 @@ class Task < ActiveRecord::Base
   scope :recent, lambda { 
     where due_date: (Date.today..(Date.today+6.days))
   }
+
 end

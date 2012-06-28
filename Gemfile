@@ -12,15 +12,20 @@ end
 gem "jquery-rails"
 
 gem 'validates_timeliness', '~> 3.0.2'
+gem 'russian'
 
 gem "haml", ">= 3.1.6"
 gem "haml-rails", ">= 0.3.4", :group => :development
 
 gem "inherited_resources"
 
+group :test, :development do
+  gem "factory_girl_rails", ">= 3.3.0"
+  gem 'faker'
+end
+
 group :test do
   gem "rspec-rails", ">= 2.10.1"
-  gem "factory_girl_rails", ">= 3.3.0"
   gem "autotest-rails"
   gem "autotest-growl"
   gem "timecop"

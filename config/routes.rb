@@ -1,5 +1,6 @@
 Todo::Application.routes.draw do
   root :to => 'tasks#index'
+  resources :tasks, :except => :show
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

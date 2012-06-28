@@ -1,3 +1,55 @@
+:css
+  td.weekend {
+    color: red;
+  }
+  
+  .tasks h2 {
+    margin-top: 48px;
+    border-bottom: 1px dashed black;
+  }
+  
+  .tasks .task h3 {
+    margin-bottom: 0px;
+  }
+
+.sidebar
+  
+  -# Show calendar for current month
+  .calendar
+  
+    -#  Current month name
+    %h3= Russian.strftime(@calendar_date, '%B')
+    
+    %table
+      %thead
+        %th Пн
+        %th Вт
+        %th Ср
+        %th Чт
+        %th Пт
+        %th Сб
+        %th Вс
+      %tr
+        - (@calendar_date.beginning_of_month..@calendar_date.end_of_month).each do |date|
+          - week_day = date.cwday
+          
+          -# offset beginning of calendar
+          - if date == @calendar_date.beginning_of_month
+            - (week_day-1).times do
+              %td.offset
+              
+          %td{ :class => get_calendar_day_class(date) }
+            = link_to_if (@days_with_tasks and @days_with_tasks.include?(date)), date.day, tasks_path(:date => date)
+          
+          -# offset end of calendar
+          - if date == @calendar_date.end_of_month
+            - (7 - week_day).times do
+              %td.offset
+          
+          -# restart the week
+          - if week_day == 7
+            </tr><tr>
+
 .tasks
   %h1 Задачи на ближайшие 7 дней
   
@@ -5,18 +57,21 @@
   
     - previous_due_date = nil
     - @tasks.each do |task|
-      - if not previous_due_date.nil? and task.due_date > previous_due_date
-        %h2
+    
+      -# Display date if it's the first task in this day
+      - if previous_due_date.nil? or task.due_date > previous_due_date
+        - previous_due_date = task.due_date
+        %h2.date
           = Russian.strftime(task.due_date, '%A, %d %b')
           = " (сегодня)" if task.due_date == Date.today
-
+      
+      -# Display task
       %div{ :class => get_task_class(task) }
         %h3= task.name
-        .description = task.description
+        .description= task.description
         
   - else
-    
-    .message
+    -# Message in case we have no tasks
+    .empty_list_message
       К сожалению вы пока не добавили ни одной задачи,
       почему бы не #{link_to 'сделать это сейчас', '#'}?
-  
