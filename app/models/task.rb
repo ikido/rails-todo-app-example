@@ -8,9 +8,9 @@ class Task < ActiveRecord::Base
     on_or_after: lambda { Date.today }, 
     on_or_after_message: "не может быть в прошлом",
     if: Proc.new { |t| t.due_date_changed? or t.new_record? }
-  
-  scope :recent, lambda { 
-    where due_date: (Date.today..(Date.today+6.days))
-  }
+
+  scope :same_month_as, (lambda do |date|
+    where(due_date: date.beginning_of_month..date.end_of_month)
+  end)
 
 end

@@ -23,3 +23,11 @@ end
 То /^я не вижу ссылку "(.*?)" в блоке "(.*?)"$/ do |link_text, block|
   page.find(block).should_not have_link link_text
 end
+
+То /^я вижу ссылку "(.*?)" в блоке "(.*?)"$/ do |link_text, block|
+  page.find(block).should have_link link_text
+end
+
+Если /^я нажимаю на ссылку "(.*?)" в блоке "(.*?)"$/ do |link_text, block|
+  page.find(block).click_link link_text
+end

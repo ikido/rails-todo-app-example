@@ -13,12 +13,13 @@
   }
 
 .sidebar
-  
-  -# Show calendar for current month
+
   .calendar
   
-    -#  Current month name
-    %h3= Russian.strftime(@calendar_date, '%B')
+    %h3
+    = link_to '&larr;'.html_safe, tasks_path(:date => (@calendar_date.beginning_of_month - 1.month))
+    = Russian.strftime(@calendar_date, '%B')
+    = link_to '&rarr;'.html_safe, tasks_path(:date => (@calendar_date.beginning_of_month + 1.month))
     
     %table
       %thead
@@ -51,27 +52,23 @@
             </tr><tr>
 
 .tasks
-  %h1 Задачи на ближайшие 7 дней
+  %h1
+    = Russian.strftime(@calendar_date, '%A, %d %b')
+    \- Список задач
   
   - unless @tasks.empty?
   
-    - previous_due_date = nil
     - @tasks.each do |task|
-    
-      -# Display date if it's the first task in this day
-      - if previous_due_date.nil? or task.due_date > previous_due_date
-        - previous_due_date = task.due_date
-        %h2.date
-          = Russian.strftime(task.due_date, '%A, %d %b')
-          = " (сегодня)" if task.due_date == Date.today
       
-      -# Display task
       %div{ :class => get_task_class(task) }
         %h3= task.name
         .description= task.description
         
   - else
-    -# Message in case we have no tasks
+
     .empty_list_message
-      К сожалению вы пока не добавили ни одной задачи,
-      почему бы не #{link_to 'сделать это сейчас', '#'}?
+      %p
+        Вы пока не добавили ни одной задачи,
+        #{link_to 'почему бы не сделать это сейчас?', '#'}
+      %p
+        Хотя, с другой стороны, ничего не делать тоже полезно.

@@ -36,28 +36,29 @@ describe Task do
     task.should_not be_valid
   end
   
-  describe "::recent" do
-    it "has recent scope" do
-      Task.should respond_to(:recent)
+  describe "::same_month_as" do
+    it "has same_month_as scope" do
+      Task.should respond_to(:same_month_as).with(1).arguments
     end
     
-    it "includes tasks that are due in 7 days including today" do
-      @task = FactoryGirl.create(:task, :due_date => (@current_date + 6.days).strftime("%d.%m.%Y"))
-      Task.recent.should include(@task)
+    it "includes tasks that are due in this month" do
+      task = FactoryGirl.create :task, due_date: @current_date.end_of_month
+      Task.same_month_as(@current_date).should include(task)
     end
 
     it "excludes tasks with past due dates" do
-      # Time travel to yeasterday to create task
-      Timecop.travel(@current_date - 1.day)
-      @task = FactoryGirl.create(:task, :due_date => (@current_date - 1.day).strftime("%d.%m.%Y"))
-      Timecop.travel(@current_date)
+      # Time travel to past to create task
+      past_date = @current_date.beginning_of_month - 1.day
+      Timecop.travel past_date
+      task = FactoryGirl.create :task, due_date: past_date
+      Timecop.travel @current_date
       
-      Task.recent.should_not include(@task)      
+      Task.same_month_as(@current_date).should_not include task
     end
     
-    it "excludes tasks with due dates not within next 6 days" do
-      @task = FactoryGirl.create(:task, :due_date => (@current_date + 7.days).strftime("%d.%m.%Y"))
-      Task.recent.should_not include(@task)
+    it "excludes tasks with due dates not within same month" do
+      task = FactoryGirl.create :task, due_date: (@current_date.end_of_month + 1.day)
+      Task.same_month_as(@current_date).should_not include task
     end
   end
 end

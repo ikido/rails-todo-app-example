@@ -50,12 +50,17 @@ describe "tasks/index.html.haml" do
       assign :days_with_tasks, [Date.today, Date.tomorrow]
       
       render
-      
-      puts page.native
             
       page.find('.calendar').should have_link Date.today.strftime('%d')
       page.find('.calendar').should have_link Date.tomorrow.strftime('%d')
       page.find('.calendar').should_not have_link (Date.today + 2.days).strftime('%d')
+    end
+    
+    it 'shows links to previous and next month' do
+      render 
+      
+      page.find('.calendar').should have_link '←'
+      page.find('.calendar').should have_link '→'
     end
   end
   
@@ -78,13 +83,6 @@ describe "tasks/index.html.haml" do
           task.should have_selector 'h3'
           task.should have_selector 'div.description'
         end
-      end
-    
-      it "displays all task dates (and probably groups tasks by them)" do
-        render
-        
-        dates = @tasks.map(&:due_date).uniq
-        page.should have_selector '.tasks h2.date', :count => dates.size
       end
     end
   end
