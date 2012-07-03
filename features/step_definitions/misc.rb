@@ -10,24 +10,56 @@ end
   visit path
 end
 
-То /^я вижу текст "(.*?)" в блоке "(.*?)"$/ do |text, block|
-  page.find(block).should have_content text
+То /^я вижу текст "(.*?)"$/ do |text|
+  page.should have_content text
 end
 
-То /^я вижу ссылки "(.*?)" в блоке "(.*?)"$/ do |links, block|
+То /^я вижу ссылки "(.*?)"$/ do |links|
   links.split(', ').each do |link_text|
-    page.find(block).should have_link link_text
+    page.should have_link link_text
   end
 end
 
-То /^я не вижу ссылку "(.*?)" в блоке "(.*?)"$/ do |link_text, block|
-  page.find(block).should_not have_link link_text
+То /^я не вижу ссылку "(.*?)"$/ do |link_text|
+  page.should_not have_link link_text
 end
 
-То /^я вижу ссылку "(.*?)" в блоке "(.*?)"$/ do |link_text, block|
-  page.find(block).should have_link link_text
+То /^я вижу ссылку "(.*?)"$/ do |link_text|
+  page.should have_link link_text
 end
 
-Если /^я нажимаю на ссылку "(.*?)" в блоке "(.*?)"$/ do |link_text, block|
-  page.find(block).click_link link_text
+Если /^я нажимаю на ссылку "(.*?)"$/ do |link_text|
+  page.click_link link_text
+end
+
+Если /^я нажимаю на первую ссылку "(.*?)"$/ do |link_text|
+  page.first('a', text: link_text).click
+end
+
+То /^я вижу поле "(.*?)" заполненное как "(.*?)"$/ do |field_name, field_value|
+  page.should have_field field_name, with: field_value
+end
+
+Если /^я заполняю поле "(.*?)" как "(.*?)"$/ do |field_name, field_value|
+  page.fill_in field_name, with: field_value
+end
+
+Если /^я нажимаю кнопку "(.*?)"$/ do |button_name|
+  page.click_button button_name
+end
+
+Если /^я отмечаю чекбокс "(.*?)"$/ do |check_box_name|
+  page.check check_box_name
+end
+
+Если /^я снимаю чекбокс "(.*?)"$/ do |check_box_name|
+  page.uncheck check_box_name
+end
+
+То /^я вижу отмеченный чекбокс "(.*?)"$/ do |check_box_name|
+  page.should have_checked_field check_box_name
+end
+
+То /^я вижу не отмеченный чекбокс "(.*?)"$/ do |check_box_name|
+  page.should have_unchecked_field check_box_name
 end

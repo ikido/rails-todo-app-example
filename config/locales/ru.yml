@@ -1,0 +1,21 @@
+ru:
+  simple_form:
+    labels:
+      task:
+        due_date: Дата
+        name: Название
+        description: Описание
+        important: Важно
+        completed: Выполнено
+        
+  tasks:
+    flash:
+      create:
+        success: 'Задача успешно добавлена'
+        error: 'Ошибка. Задача не добавлена'
+      update:
+        success: 'Задача успешно сохранена'
+        error: 'Ошибка. Задача не сохранена'
+      destroy:
+        success: 'Задача успешно удалена'
+        error: 'Ошибка. Задача не удалена'

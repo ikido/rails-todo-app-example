@@ -17,7 +17,7 @@ gem 'russian'
 gem "haml", ">= 3.1.6"
 gem "haml-rails", ">= 0.3.4", :group => :development
 
-gem "inherited_resources"
+gem 'simple_form'
 
 group :test, :development do
   gem "factory_girl_rails", ">= 3.3.0"

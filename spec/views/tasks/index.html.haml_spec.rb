@@ -51,8 +51,8 @@ describe "tasks/index.html.haml" do
       
       render
             
-      page.find('.calendar').should have_link Date.today.strftime('%d')
-      page.find('.calendar').should have_link Date.tomorrow.strftime('%d')
+      page.find('.calendar').should have_link Date.today.day.to_s
+      page.find('.calendar').should have_link Date.tomorrow.day.to_s
       page.find('.calendar').should_not have_link (Date.today + 2.days).strftime('%d')
     end
     
@@ -84,6 +84,28 @@ describe "tasks/index.html.haml" do
           task.should have_selector 'div.description'
         end
       end
+    end
+  end
+  
+  it "displays link to add task" do
+    render
+    
+    page.should have_link 'Добавить задачу'
+  end
+  
+  it "displays links to edit tasks" do
+    render
+    
+    page.all('.tasks .task').each do |task| 
+      task.should have_link 'Редактировать задачу'
+    end
+  end
+  
+  it "displays links to destroy tasks" do
+    render
+    
+    page.all('.tasks .task').each do |task| 
+      task.should have_link 'Удалить задачу'
     end
   end
 end

@@ -1,0 +1,7 @@
+= simple_form_for @task do |f|
+  = f.input :due_date, as: :string, input_html: { value: (f.object.due_date.blank? ? nil : f.object.due_date.strftime('%d.%m.%Y')) }
+  = f.input :name
+  = f.input :description
+  = f.input :important
+  = f.input :completed
+  = f.submit 'Сохранить'

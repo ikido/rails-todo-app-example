@@ -1,0 +1,7 @@
+%h1 Редактирование задачи
+
+%p
+  &larr;
+  = link_to "Вернуться назад", tasks_path(:date => @task.due_date)
+
+= render partial: 'form', locals: { task: @task }

@@ -55,6 +55,7 @@
   %h1
     = Russian.strftime(@calendar_date, '%A, %d %b')
     \- Список задач
+    [ #{link_to 'Добавить задачу', new_task_path(:date => @calendar_date) }]
   
   - unless @tasks.empty?
   
@@ -63,6 +64,9 @@
       %div{ :class => get_task_class(task) }
         %h3= task.name
         .description= task.description
+        .actions 
+          = link_to 'Редактировать задачу', edit_task_path(task)
+          = link_to 'Удалить задачу', task_path(task), :method => :delete
         
   - else
 

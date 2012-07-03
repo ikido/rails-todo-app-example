@@ -6,4 +6,9 @@
     = javascript_include_tag "application"
     = csrf_meta_tags
   %body
+    - unless flash.empty?
+      #flash
+        - flash.each do |name, msg|
+          = content_tag(:div, msg, :class => name)
+          
     = yield

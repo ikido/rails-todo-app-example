@@ -18,7 +18,7 @@ end
   end
 end
 
-То /^не вижу следующие задачи:$/ do |table|
+То /^я не вижу следующие задачи:$/ do |table|
   table.raw.flatten.each do |text|
     page.should_not have_content text
   end
