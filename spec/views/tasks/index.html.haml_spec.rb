@@ -2,6 +2,14 @@
 
 require 'spec_helper'
 
+def calendar_block
+  @calendar_block ||= page.find('.calendar')
+end
+
+def filter_block
+  @filter_block ||= page.find('.filter')
+end
+
 describe "tasks/index.html.haml" do
   before :all do
     @calendar_date = Date.today
@@ -14,27 +22,29 @@ describe "tasks/index.html.haml" do
   end
   
   describe "calendar block" do
-    
+        
     it "displays current month name" do      
       render
-      page.find('.calendar').should have_content Russian.strftime(@calendar_date, '%B')
+      calendar_block.should have_content Russian.strftime(@calendar_date, '%B')
     end
     
     it 'displays offset cells' do
       start_offset = @calendar_date.beginning_of_month.cwday - 1      
       end_offset = 7 - @calendar_date.end_of_month.cwday
       render
-
+      
+      calender_table = calendar_block.find('table')
+      
       if start_offset > 0
-        page.find('.calendar table').first('tr').should have_selector('td.offset', :count => start_offset)
+        calender_table.first('tr').should have_selector('td.offset', :count => start_offset)
       else
-        page.find('.calendar table').first('tr').should_not have_selector('td.offset')
+        calender_table.first('tr').should_not have_selector('td.offset')
       end
       
       if end_offset > 0
-        page.find('.calendar table').all('tr').last.should have_selector('td.offset', :count => end_offset)
+        calender_table.all('tr').last.should have_selector('td.offset', :count => end_offset)
       else
-        page.find('.calendar table').all('tr').last.should_not have_selector('td.offset')
+        calender_table.all('tr').last.should_not have_selector('td.offset')
       end  
     end
     
@@ -46,21 +56,21 @@ describe "tasks/index.html.haml" do
       end
     end
     
-    it 'shows links to days wich have tasks' do
+    it 'shows class for days wich have tasks' do
       assign :days_with_tasks, [Date.today, Date.tomorrow]
       
       render
             
-      page.find('.calendar').should have_link Date.today.day.to_s
-      page.find('.calendar').should have_link Date.tomorrow.day.to_s
-      page.find('.calendar').should_not have_link (Date.today + 2.days).strftime('%d')
+      calendar_block.should have_selector 'a.has_tasks', text: Date.today.day.to_s
+      calendar_block.should have_selector 'a.has_tasks', text: Date.tomorrow.day.to_s
+      calendar_block.should_not have_selector 'a.has_tasks', text: (Date.today + 2.days).day.to_s
     end
     
     it 'shows links to previous and next month' do
       render 
       
-      page.find('.calendar').should have_link '←'
-      page.find('.calendar').should have_link '→'
+      calendar_block.should have_link '←'
+      calendar_block.should have_link '→'
     end
   end
   
@@ -106,6 +116,25 @@ describe "tasks/index.html.haml" do
     
     page.all('.tasks .task').each do |task| 
       task.should have_link 'Удалить задачу'
+    end
+  end
+  
+  describe "filter block" do
+    
+    it "displays links to sort by importance" do
+      render
+    
+      filter_block.should have_link 'Важные'
+      filter_block.should have_link 'Не важные'
+      filter_block.should have_content 'Любая важность'
+    end
+    
+    it "displays links to sort by completed state" do
+      render
+    
+      filter_block.should have_link 'Выполненые'
+      filter_block.should have_link 'Не выполненые'
+      filter_block.should have_content 'Любой статус выполнения'
     end
   end
 end

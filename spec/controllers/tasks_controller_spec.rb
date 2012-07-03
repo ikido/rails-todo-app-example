@@ -37,6 +37,32 @@ describe TasksController do
       get :index, :date => date
       assigns(:calendar_date).should eq(parsed_date)
     end
+    
+    it "allows to filter by importance" do
+      today = Date.parse('27.06.2012')
+      Timecop.travel today
+      
+      Task.should_receive(:where).once.with(due_date: today).and_return(Task)      
+      Task.should_receive(:where).with(important: true)      
+      get :index, :important => "true"
+      
+      Task.should_receive(:where).once.with(due_date: today).and_return(Task)
+      Task.should_receive(:where).with(important: false)      
+      get :index, :important => "false"
+    end
+    
+    it "allows to filter by completed state" do
+      today = Date.parse('27.06.2012')
+      Timecop.travel today
+      
+      Task.should_receive(:where).once.with(due_date: today).and_return(Task)      
+      Task.should_receive(:where).with(completed: true)      
+      get :index, :completed => "true"
+      
+      Task.should_receive(:where).once.with(due_date: today).and_return(Task)
+      Task.should_receive(:where).with(completed: false)      
+      get :index, :completed => "false"
+    end
   end
   
   describe "GET new" do

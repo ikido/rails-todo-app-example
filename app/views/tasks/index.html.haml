@@ -40,7 +40,7 @@
               %td.offset
               
           %td{ :class => get_calendar_day_class(date) }
-            = link_to_if (@days_with_tasks and @days_with_tasks.include?(date)), date.day, tasks_path(:date => date)
+            = link_to date.day, tasks_path(:date => date), class: (@days_with_tasks and @days_with_tasks.include?(date) ? 'has_tasks' : nil)
           
           -# offset end of calendar
           - if date == @calendar_date.end_of_month
@@ -51,6 +51,18 @@
           - if week_day == 7
             </tr><tr>
 
+.filter
+  
+  %ul
+    %li= tasks_filter_link_to_attribute(:important, true, 'Важные')
+    %li= tasks_filter_link_to_attribute(:important, false, 'Не важные')
+    %li= tasks_filter_link_to_attribute(:important, nil, 'Любая важность')    
+  
+  %ul
+    %li= tasks_filter_link_to_attribute(:completed, true, 'Выполненые')
+    %li= tasks_filter_link_to_attribute(:completed, false, 'Не выполненые')
+    %li= tasks_filter_link_to_attribute(:completed, nil, 'Любой статус выполнения')
+    
 .tasks
   %h1
     = Russian.strftime(@calendar_date, '%A, %d %b')
@@ -73,6 +85,6 @@
     .empty_list_message
       %p
         Вы пока не добавили ни одной задачи,
-        #{link_to 'почему бы не сделать это сейчас?', '#'}
+        #{link_to 'почему бы не сделать это сейчас?', new_task_path(:date => @calendar_date)}
       %p
         Хотя, с другой стороны, ничего не делать тоже полезно.

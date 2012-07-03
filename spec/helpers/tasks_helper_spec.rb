@@ -18,19 +18,7 @@ describe TasksHelper do
     end
   end
   
-  describe "#get_calendar_day_class" do
-    
-    it "returns day date by default" do
-      work_day = Date.parse('01.06.2012')
-      helper.get_calendar_day_class(work_day).should eql work_day.to_s
-    end
-    
-    
-    it "contains 'weekend' if it's sunday or saturday" do
-      weekend_days = [Date.parse('02.06.2012'), Date.parse('03.06.2012')]
-      weekend_days.each do |day|
-        helper.get_calendar_day_class(day).should include 'weekend'
-      end
-    end
+  describe "#tasks_filter_link_to_attribute" do
+    it "returns link with filter applied, if not applied yet"
   end
 end
