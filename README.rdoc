@@ -1,3 +1,6 @@
 == Rails Todo app example
 
-This is example of rails 3.2 todo app with rspec/cucumber tests
+This is example of rails 3.2 todo app with rspec/cucumber tests.
+You can see features at features/tasks, they are in russian though.
+
+To start an app clone repo, then start thin with `rails -s` and go to http://localhost:3000
